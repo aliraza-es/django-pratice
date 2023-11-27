@@ -9,6 +9,7 @@ from rest_framework.permissions import AllowAny
 from .serializers import CustomUserSerializer
 from .serializers import UserProfileSerializer
 from .models import UserProfile
+from .serializers import EmailLoginSerializer
 
 class UserRegistrationView(APIView):
     permission_classes = [AllowAny]
@@ -67,3 +68,31 @@ class UserProfileView(APIView):
         except UserProfile.DoesNotExist:
             # Create a new profile if it doesn't exist
             return UserProfile.objects.create(user=user)
+
+
+class EmailLoginView(APIView):
+    
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = EmailLoginSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            
+            user = authenticate(
+                request,
+                email=serializer.validated_data['email'],
+                password=serializer.validated_data['password']
+            )
+            if user:
+                refresh = RefreshToken.for_user(user)
+                access_token = str(refresh.access_token)
+                message = f'Logged in successfully.'
+
+                return Response({
+                    'message': message,
+                    'bearer_token': access_token,
+                    'refresh_token': str(refresh),
+                }, status=status.HTTP_200_OK)
+            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
