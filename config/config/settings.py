@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "app",
+    "company",
 ]
 
 REST_FRAMEWORK = {
@@ -153,3 +154,17 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 AUTH_USER_MODEL = 'app.CustomUser'
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'devfortesting2023@gmail.com'
+# EMAIL_HOST_PASSWORD = 'ForTesting'
+
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_HOST_USER = 'c7a51916418e7d'
+EMAIL_HOST_PASSWORD = 'b0d9f8a50c2327'
+EMAIL_PORT = '2525'
+
+FRONTEND_URL = 'test-url.test'
